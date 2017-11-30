@@ -27,7 +27,7 @@ defmodule UnicornEncourager.Unicorn do
     Neopixel.render(@channel, {intensity, frame.pixels})
   end
 
-  def scroll(intensity, rows, speed \\ 250) do
+  def scroll(rows, intensity, speed \\ 250) do
     initial_frame = %Frame{pixels: List.flatten(Enum.take(rows, 4))}
 
     rows
