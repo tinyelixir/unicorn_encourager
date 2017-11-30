@@ -1,5 +1,13 @@
 defmodule UnicornEncourager.Font do
+  require Logger
+
   @characters %{
+    "2" => [" XX    X",
+            " X X   X",
+            " X  X  X",
+            " X  X  X",
+            " X   XX "],
+
     "A" => [" XXXXXX ",
             "   X   X",
             "   X   X",
@@ -145,7 +153,14 @@ defmodule UnicornEncourager.Font do
 
     "." => ["XX      "],
 
+    "," => ["X       ",
+            "XX      "],
+
     "'" => ["     XXX"],
+
+    "-" => ["    X   ",
+            "    X   ",
+            "    X   "],
 
     "🐶" => ["  XX    ",
              "  XXXX  ",
@@ -164,6 +179,15 @@ defmodule UnicornEncourager.Font do
              "  XXXX  ",
              "  XX    "],
 
+    "{" => ["  X     ",
+            "  XX    ",
+            "  XXXX  ",
+            "XXX  XXX",
+            "X      X"],
+
+    ")" => ["X      X",
+            "XXX  XXX",
+            "  XXXX  "],
 
     "❤️" => ["    XXX ",
             "  XXXXXX",
@@ -171,10 +195,7 @@ defmodule UnicornEncourager.Font do
             "XXXXXXX ",
             " XXXXXXX",
             "  XXXXXX",
-            "    XXX ",
-
-
-    ]
+            "    XXX "]
   }
 
   def string_to_pixels(string, color \\ {0xFF, 0xFF, 0xFF}) do
@@ -186,8 +207,12 @@ defmodule UnicornEncourager.Font do
   end
 
   def letter_to_pixels(letter, color) do
-    @characters[letter]
-    |> Enum.map(fn(row) -> row_to_pixels(row, color) end)
+    case @characters[letter] do
+      nil ->
+        Logger.error "#{letter} not found"
+        nil
+      rows -> Enum.map(rows, fn(row) -> row_to_pixels(row, color) end)
+    end
   end
 
   defp row_to_pixels(row, color) do
@@ -201,7 +226,6 @@ defmodule UnicornEncourager.Font do
 
   defp space do
     [
-      [{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}],
       [{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}]
     ]
   end
