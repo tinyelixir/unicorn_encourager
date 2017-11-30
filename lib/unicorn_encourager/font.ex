@@ -146,29 +146,58 @@ defmodule UnicornEncourager.Font do
     "." => ["XX      "],
 
     "'" => ["     XXX"],
+
+    "🐶" => ["  XX    ",
+             "  XXXX  ",
+             "   XXXX ",
+             " XXXXXX ",
+             "X      X",
+             "        ",
+             " X   XX ",
+             "X  X    ",
+             " XXX    ",
+             "X  X    ",
+             " X   XX ",
+             "        ",
+             " XXXXXX ",
+             "   XXXX ",
+             "  XXXX  ",
+             "  XX    "],
+
+
+    "❤️" => ["    XXX ",
+            "  XXXXXX",
+            " XXXXXXX",
+            "XXXXXXX ",
+            " XXXXXXX",
+            "  XXXXXX",
+            "    XXX ",
+
+
+    ]
   }
 
-  def string_to_pixels(string) do
+  def string_to_pixels(string, color \\ {0xFF, 0xFF, 0xFF}) do
     string
     |> String.graphemes()
-    |> Enum.map(&letter_to_pixels/1)
+    |> Enum.map(fn(letter) -> letter_to_pixels(letter, color) end)
     |> Enum.intersperse(space())
     |> Enum.reduce([], fn(letter, acc) -> Kernel.++(acc, letter) end)
   end
 
-  def letter_to_pixels(letter) do
+  def letter_to_pixels(letter, color) do
     @characters[letter]
-    |> Enum.map(&row_to_pixels/1)
+    |> Enum.map(fn(row) -> row_to_pixels(row, color) end)
   end
 
-  defp row_to_pixels(row) do
+  defp row_to_pixels(row, color) do
     row
     |> String.graphemes()
-    |> Enum.map(&grapheme_to_pixel/1)
+    |> Enum.map(fn(grapheme) -> grapheme_to_pixel(grapheme, color) end)
   end
 
-  defp grapheme_to_pixel(" "), do: {0,0,0}
-  defp grapheme_to_pixel(_), do: {255, 255, 255}
+  defp grapheme_to_pixel(" ", _), do: {0,0,0}
+  defp grapheme_to_pixel(_, color), do: color
 
   defp space do
     [
